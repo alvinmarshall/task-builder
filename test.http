@@ -1,4 +1,19 @@
-POST http://localhost:3000/api/v1/tasks
+POST http://localhost:3100/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "john k",
+  "email": "john@me.com",
+  "password": "1234",
+  "contact": "38399238"
+}
+
+###
+GET http://localhost:3100/api/v1/users
+Accept: application/json
+
+###
+POST http://localhost:3100/api/v1/tasks
 Content-Type: application/json
 
 {
@@ -6,7 +21,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/api/v1/tasks
+GET http://localhost:3100/api/v1/tasks
 Accept: application/json
 
 ###
@@ -22,3 +37,4 @@ GET http://localhost:3000/api/v1/health
 Accept: application/json
 
 ###
+

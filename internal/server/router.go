@@ -10,6 +10,7 @@ func (s *server) MapRoutes() {
 	apiV1 := s.engine.Group("api/v1")
 	s.healthRoutes(apiV1)
 	s.taskRoutes(apiV1)
+	handler.UserRouter(apiV1, s.container)
 
 }
 

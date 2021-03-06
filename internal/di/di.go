@@ -25,6 +25,10 @@ func BuildContainer() *dig.Container {
 	container.Provide(orm.NewTaskRepo)
 	container.Provide(service.NewTaskService)
 
+	// user
+	container.Provide(orm.NewUserRepo)
+	container.Provide(service.NewUserService)
+
 	return container
 }
 
