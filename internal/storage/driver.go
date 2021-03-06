@@ -10,7 +10,9 @@ import (
 
 func NewDataSource(c *config.Config) (*gorm.DB, error) {
 	if c.DataSource.Use == "postgres" {
-		return newPostgres(c)
+		if c.DataSource.Postgres.Enabled {
+			return newPostgres(c)
+		}
 	}
 	return nil, errors.New(fmt.Sprintf("DataSource Not Implemented %s", c.DataSource.Use))
 }

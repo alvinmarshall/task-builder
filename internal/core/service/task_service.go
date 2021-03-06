@@ -1,12 +1,13 @@
-package task
+package service
 
 import (
 	"errors"
 	"taskbuilder/internal/core/domain"
+	"taskbuilder/internal/core/port"
 )
 
 type taskService struct {
-	taskRepository TaskRepository
+	taskRepository port.TaskRepository
 }
 
 func (t *taskService) Create(task domain.Task) (*domain.Task, error) {
@@ -43,6 +44,6 @@ func (t *taskService) Update(data domain.Task) error {
 	return t.taskRepository.Update(data)
 }
 
-func NewTaskService(taskRepository TaskRepository) TaskService {
+func NewTaskService(taskRepository port.TaskRepository) port.TaskService {
 	return &taskService{taskRepository}
 }

@@ -1,4 +1,4 @@
-package core
+package domain
 
 import (
 	"github.com/jinzhu/gorm"

@@ -11,6 +11,11 @@ Accept: application/json
 
 ###
 
+GET http://localhost:3000/api/v1/tasks/fb8316bb-3e33-4749-88ab-4d68d02976c0
+Accept: application/json
+
+###
+
 
 ###
 GET http://localhost:3000/api/v1/health

@@ -3,10 +3,10 @@ package di
 import (
 	"go.uber.org/dig"
 	"taskbuilder/internal/config"
+	"taskbuilder/internal/core/service"
 	"taskbuilder/internal/logger"
 	"taskbuilder/internal/storage"
 	"taskbuilder/internal/storage/orm"
-	"taskbuilder/internal/task"
 )
 
 var container = dig.New()
@@ -23,7 +23,7 @@ func BuildContainer() *dig.Container {
 
 	// task
 	container.Provide(orm.NewTaskRepo)
-	container.Provide(task.NewTaskService)
+	container.Provide(service.NewTaskService)
 
 	return container
 }

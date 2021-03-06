@@ -4,21 +4,21 @@ import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"taskbuilder/internal/core/domain"
+	"taskbuilder/internal/core/port"
 	"taskbuilder/internal/handler/dto"
-	"taskbuilder/internal/task"
 )
 
 type taskHandler struct {
-	service task.TaskService
+	service port.TaskService
 }
 
-func NewTaskHandler(service task.TaskService) *taskHandler {
+func NewTaskHandler(service port.TaskService) *taskHandler {
 	return &taskHandler{service}
 }
 
 func (hdl *taskHandler) Get(c echo.Context) error {
-
-	result, err := hdl.service.Get(c.Param("id"))
+	param := c.Param("id")
+	result, err := hdl.service.Get(param)
 	if err != nil {
 		return c.JSONPretty(http.StatusInternalServerError, map[string]string{"error": err.Error()}, " ")
 
