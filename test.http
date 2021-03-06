@@ -1,4 +1,4 @@
-POST http://localhost:3000/tasks
+POST http://localhost:3000/api/v1/tasks
 Content-Type: application/json
 
 {
@@ -6,7 +6,14 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/tasks
+GET http://localhost:3000/api/v1/tasks
+Accept: application/json
+
+###
+
+
+###
+GET http://localhost:3000/api/v1/health
 Accept: application/json
 
 ###

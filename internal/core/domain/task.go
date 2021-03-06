@@ -1,7 +1,11 @@
 package domain
 
+import (
+	"taskbuilder/internal/core"
+)
+
 type Task struct {
-	BaseEntity
+	core.BaseEntity
 	Title       string
 	IsCompleted bool `json:"is_completed"`
 }
