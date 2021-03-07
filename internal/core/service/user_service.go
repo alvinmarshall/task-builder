@@ -19,6 +19,10 @@ func (u *userService) Create(user domain.User) (*domain.User, error) {
 	if result != nil {
 		return nil, errors.New(fmt.Sprintf("email already in use: %s", user.Email))
 	}
+	err = user.HashPassword(user.Password)
+	if err != nil {
+		println(err.Error())
+	}
 	return u.userRepository.Save(user)
 }
 

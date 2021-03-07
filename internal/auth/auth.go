@@ -3,8 +3,15 @@ package auth
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/labstack/echo/v4/middleware"
 	"time"
 )
+
+type JwtPayload struct {
+	Id    string
+	Email string
+	Role  string
+}
 
 type JwtWrapper struct {
 	Secret    string
@@ -13,15 +20,30 @@ type JwtWrapper struct {
 }
 
 type JwtClaim struct {
+	Id    string
 	Email string
+	Role  string
 	jwt.StandardClaims
 }
 
-func (j *JwtWrapper) GenerateToken(email string) (token string, err error) {
+func GetJWTConfig(secret string) middleware.JWTConfig {
+	return middleware.JWTConfig{
+		Claims:     &JwtClaim{},
+		SigningKey: secret,
+	}
+}
+
+func (j *JwtWrapper) GenerateToken(payload JwtPayload) (token string, err error) {
 	claim := &JwtClaim{
-		Email: email,
+		Email: payload.Email,
+		Role:  payload.Role,
+		Id:    payload.Id,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * time.Duration(j.ExpiresAt)).Unix(),
+			Issuer:    j.Issuer,
+			Id:        payload.Id,
+			Subject:   payload.Email,
+			IssuedAt:  time.Now().Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * time.Duration(j.ExpiresAt)).Unix(),
 		},
 	}
 	withClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)

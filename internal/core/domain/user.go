@@ -6,7 +6,7 @@ type User struct {
 	BaseEntity
 	Name     string `json:"name"`
 	Email    string `json:"email"`
-	Password string `json:"password"`
+	Password string `json:"-"`
 	Contact  string `json:"contact"`
 }
 
@@ -16,7 +16,7 @@ func (User) TableName() string {
 	return "users"
 }
 
-func (user *User) hashPassword(password string) error {
+func (user *User) HashPassword(password string) error {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
 		return err

@@ -18,11 +18,12 @@ func main() {
 }
 
 func run() error {
+	buildContainer := di.BuildContainer()
+
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	buildContainer := di.BuildContainer()
 	s := server.NewServer(e, buildContainer)
 	s.MapRoutes()
 

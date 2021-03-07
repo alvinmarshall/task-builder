@@ -20,3 +20,8 @@ logger:
   environment: dev
   logLevel: debug
   filename:
+
+jwt:
+  secret: secret
+  expires: 60
+  issuer:

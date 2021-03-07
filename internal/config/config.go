@@ -27,6 +27,11 @@ type Config struct {
 		LogLevel    string `default:"debug"`
 		FileName    string `default:"app.log"`
 	}
+	Jwt struct {
+		Secret  string `default:"secrete"`
+		Expires int
+		Issuer  string `default:"my-application"`
+	}
 }
 
 func NewConfig() (*Config, error) {
