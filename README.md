@@ -1,4 +1,6 @@
 # Task Builder
-A simple REST service using:
+A REST service using:
+* Hexagonal architecture
 * GORM
 * Echo Framework
+* JWT
