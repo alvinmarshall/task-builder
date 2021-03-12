@@ -8,6 +8,7 @@ type User struct {
 	Email    string `json:"email"`
 	Password string `json:"-"`
 	Contact  string `json:"contact"`
+	Tasks    Tasks  `gorm:"foreignKey:UserID"`
 }
 
 type Users []User

@@ -40,7 +40,7 @@ func (u userRepo) FindByEmail(email string) (*domain.User, error) {
 
 func (u userRepo) Find() (*domain.Users, error) {
 	users := &domain.Users{}
-	err := u.db.Debug().Find(users).Error
+	err := u.db.Preload("Tasks").Debug().Find(users).Error
 	if err != nil {
 		return nil, err
 	}

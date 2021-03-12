@@ -10,9 +10,9 @@ type taskRepo struct {
 	db *gorm.DB
 }
 
-func (t *taskRepo) Find() (*domain.Tasks, error) {
+func (t *taskRepo) Find(user domain.User) (*domain.Tasks, error) {
 	tasks := &domain.Tasks{}
-	err := t.db.Find(&tasks).Error
+	err := t.db.Where("user_id = ?", user.ID).Find(&tasks).Error
 	if err != nil {
 		return nil, err
 	}
