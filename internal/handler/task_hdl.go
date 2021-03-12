@@ -1,38 +1,37 @@
-package taskhdl
+package handler
 
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"taskbuilder/internal/core/domain"
-	"taskbuilder/internal/core/service"
+	"taskbuilder/internal/core/port"
 	"taskbuilder/internal/handler/dto"
 )
 
-type httpHandler struct {
-	service *service.TaskService
+type taskHandler struct {
+	service port.TaskService
 }
 
-func New(service *service.TaskService) *httpHandler {
-	return &httpHandler{service}
+func NewTaskHandler(service port.TaskService) *taskHandler {
+	return &taskHandler{service}
 }
 
-func (hdl *httpHandler) Get(c echo.Context) error {
-
-	task, err := hdl.service.Get(c.Param("id"))
+func (hdl *taskHandler) Get(c echo.Context) error {
+	param := c.Param("id")
+	result, err := hdl.service.Get(param)
 	if err != nil {
 		return c.JSONPretty(http.StatusInternalServerError, map[string]string{"error": err.Error()}, " ")
 
 	}
 	response := dto.TaskResponse{
-		Id:          task.ID,
-		Title:       task.Title,
-		IsCompleted: task.IsCompleted,
+		Id:          result.ID,
+		Title:       result.Title,
+		IsCompleted: result.IsCompleted,
 	}
-	c.JSONPretty(http.StatusOK, response, " ")
-	return nil
+	return c.JSONPretty(http.StatusOK, response, " ")
 }
 
-func (hdl *httpHandler) GetAll(c echo.Context) error {
+func (hdl *taskHandler) GetAll(c echo.Context) error {
 
 	tasks, err := hdl.service.GetAll()
 	if err != nil {
@@ -40,29 +39,27 @@ func (hdl *httpHandler) GetAll(c echo.Context) error {
 
 	}
 
-	c.JSONPretty(http.StatusOK, tasks, " ")
-	return nil
+	return c.JSONPretty(http.StatusOK, tasks, " ")
 }
 
-func (hdl *httpHandler) Create(c echo.Context) error {
+func (hdl *taskHandler) Create(c echo.Context) error {
 	taskRequest := dto.TaskRequest{}
 	err := c.Bind(&taskRequest)
 	if err != nil {
 		return c.JSONPretty(http.StatusBadRequest, map[string]string{"error": err.Error()}, " ")
 	}
-	task := domain.Task{
+	req := domain.Task{
 		Title:       taskRequest.Title,
 		IsCompleted: taskRequest.IsCompleted,
 	}
-	task, err = hdl.service.Create(task)
+	result, err := hdl.service.Create(req)
 	if err != nil {
 		return c.JSONPretty(http.StatusInternalServerError, map[string]string{"error": err.Error()}, " ")
 	}
 	response := dto.TaskResponse{
-		Id:          task.ID,
-		Title:       task.Title,
-		IsCompleted: task.IsCompleted,
+		Id:          result.ID,
+		Title:       result.Title,
+		IsCompleted: result.IsCompleted,
 	}
-	c.JSONPretty(http.StatusOK, response, " ")
-	return nil
+	return c.JSONPretty(http.StatusOK, response, " ")
 }

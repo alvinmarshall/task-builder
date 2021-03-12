@@ -1,0 +1,27 @@
+application:
+  name:
+
+server:
+  port:
+
+datasource:
+  use: postgres
+  postgres:
+    enabled: true
+    username: postgres
+    password: postgres
+    database:
+    port: 5432
+    host: localhost
+    dialect: postgres
+
+logger:
+  use: zapLogger
+  environment: dev
+  logLevel: debug
+  filename:
+
+jwt:
+  secret: secret
+  expires: 60
+  issuer:

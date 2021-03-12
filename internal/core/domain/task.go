@@ -7,3 +7,7 @@ type Task struct {
 }
 
 type Tasks []Task
+
+func (Task) TableName() string {
+	return "tasks"
+}

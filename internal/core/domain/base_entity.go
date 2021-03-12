@@ -9,8 +9,8 @@ import (
 type BaseEntity struct {
 	ID        string `gorm:"type:uuid;primary_key;"`
 	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time `sql:"index"`
+	UpdatedAt time.Time  `json:"-"`
+	DeletedAt *time.Time `sql:"index" json:"-"`
 }
 
 func (base *BaseEntity) BeforeCreate(scope *gorm.Scope) error {
