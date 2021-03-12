@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"os"
 	"taskbuilder/internal/core/domain"
 	"taskbuilder/internal/core/port"
 	"taskbuilder/internal/handler/dto"
@@ -32,8 +33,11 @@ func (hdl *taskHandler) Get(c echo.Context) error {
 }
 
 func (hdl *taskHandler) GetAll(c echo.Context) error {
-
-	tasks, err := hdl.service.GetAll()
+	user := domain.User{}
+	// TODO Replace after authentication
+	user.ID = os.Getenv("USER_ID")
+	println("uuuusr", user.ID)
+	tasks, err := hdl.service.GetAll(user)
 	if err != nil {
 		return c.JSONPretty(http.StatusInternalServerError, map[string]string{"error": err.Error()}, " ")
 
@@ -52,7 +56,10 @@ func (hdl *taskHandler) Create(c echo.Context) error {
 		Title:       taskRequest.Title,
 		IsCompleted: taskRequest.IsCompleted,
 	}
-	result, err := hdl.service.Create(req)
+	user := domain.User{}
+	// TODO Replace after authentication
+	user.ID = os.Getenv("USER_ID")
+	result, err := hdl.service.Create(req, user)
 	if err != nil {
 		return c.JSONPretty(http.StatusInternalServerError, map[string]string{"error": err.Error()}, " ")
 	}

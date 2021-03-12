@@ -27,7 +27,9 @@ func (s *server) InitializeDB() error {
 	if err != nil {
 		return err
 	}
-	db.AutoMigrate(&domain.Task{}, &domain.User{})
+	if err := db.AutoMigrate(&domain.Task{}, &domain.User{}).Error; err != nil {
+		println(err.Error())
+	}
 	return nil
 }
 

@@ -10,7 +10,8 @@ type taskService struct {
 	taskRepository port.TaskRepository
 }
 
-func (t *taskService) Create(task domain.Task) (*domain.Task, error) {
+func (t *taskService) Create(task domain.Task, user domain.User) (*domain.Task, error) {
+	task.UserID = user.ID
 	return t.taskRepository.Save(task)
 }
 
@@ -29,8 +30,8 @@ func (t *taskService) Remove(id string) error {
 	return errors.New("task not found")
 }
 
-func (t *taskService) GetAll() (*domain.Tasks, error) {
-	return t.taskRepository.Find()
+func (t *taskService) GetAll(user domain.User) (*domain.Tasks, error) {
+	return t.taskRepository.Find(user)
 }
 
 func (t *taskService) Update(data domain.Task) error {
