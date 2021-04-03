@@ -21,7 +21,7 @@ func (u *userService) Create(user domain.User) (*domain.User, error) {
 	}
 	err = user.HashPassword(user.Password)
 	if err != nil {
-		println(err.Error())
+		return nil, err
 	}
 	return u.userRepository.Save(user)
 }
@@ -37,22 +37,17 @@ func (u *userService) GetAll() (*domain.Users, error) {
 func (u *userService) Delete(id string) error {
 	user, err := u.Get(id)
 	if err != nil {
-		return err
-	}
-	if user == nil {
 		return errors.New("user not found")
 	}
 	return u.userRepository.Remove(user)
 }
 
 func (u *userService) Update(data domain.User) error {
-	user, err := u.Get(data.ID)
+	_, err := u.Get(data.ID)
 	if err != nil {
-		return err
-	}
-	if user == nil {
 		return errors.New("user not found")
 	}
+
 	return u.userRepository.Update(data)
 }
 
