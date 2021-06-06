@@ -31,10 +31,10 @@ func (u userRepo) FindOne(id string) (*domain.User, error) {
 
 func (u userRepo) FindByEmail(email string) (*domain.User, error) {
 	user := &domain.User{}
-	err := u.db.Where("email = ?", email).Find(user).Error
+	err := u.db.Where("email = ?", email).Preload("Role").Find(user).Error
 	if err != nil {
 		log.Printf("email not found: %v", err.Error())
-		return nil, nil
+		return nil, err
 	}
 	return user, nil
 }
