@@ -1,4 +1,4 @@
-package handler
+package user
 
 import (
 	"errors"
@@ -38,9 +38,11 @@ func Test_userHandler_Register(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	svc := mock_port.NewMockUserService(ctrl)
-	svc.EXPECT().Create(gomock.Any()).Return(actual, nil)
-	h := NewUserHandler(svc)
+	userService := mock_port.NewMockUserService(ctrl)
+	jwtService := mock_port.NewMockJwtService(ctrl)
+	userService.EXPECT().Create(gomock.Any()).Return(actual, nil)
+	jwtService.EXPECT().GenerateToken(gomock.Any()).Return("test token", nil)
+	h := NewUserHandler(userService, jwtService)
 
 	if assert.NoError(t, h.Register(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
@@ -62,9 +64,10 @@ func Test_userHandler_Register_failed(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	svc := mock_port.NewMockUserService(ctrl)
-	svc.EXPECT().Create(gomock.Any()).Return(nil, errors.New("an error occurred"))
-	h := NewUserHandler(svc)
+	userService := mock_port.NewMockUserService(ctrl)
+	jwtService := mock_port.NewMockJwtService(ctrl)
+	userService.EXPECT().Create(gomock.Any()).Return(nil, errors.New("an error occurred"))
+	h := NewUserHandler(userService, jwtService)
 
 	if assert.NoError(t, h.Register(c)) {
 		assert.Equal(t, http.StatusBadRequest, rec.Code)
@@ -80,9 +83,10 @@ func Test_userHandler_Index(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	svc := mock_port.NewMockUserService(ctrl)
-	svc.EXPECT().GetAll().Return(actual, nil)
-	h := NewUserHandler(svc)
+	userService := mock_port.NewMockUserService(ctrl)
+	jwtService := mock_port.NewMockJwtService(ctrl)
+	userService.EXPECT().GetAll().Return(actual, nil)
+	h := NewUserHandler(userService, jwtService)
 
 	// Assertions
 	if assert.NoError(t, h.Index(c)) {
@@ -99,9 +103,10 @@ func Test_userHandler_Index_failed(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	svc := mock_port.NewMockUserService(ctrl)
-	svc.EXPECT().GetAll().Return(nil, errors.New("an error occurred"))
-	h := NewUserHandler(svc)
+	userService := mock_port.NewMockUserService(ctrl)
+	jwtService := mock_port.NewMockJwtService(ctrl)
+	userService.EXPECT().GetAll().Return(nil, errors.New("an error occurred"))
+	h := NewUserHandler(userService, jwtService)
 
 	if assert.NoError(t, h.Index(c)) {
 		assert.Equal(t, http.StatusInternalServerError, rec.Code)

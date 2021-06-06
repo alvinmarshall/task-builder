@@ -8,7 +8,10 @@ type User struct {
 	Email    string `json:"email"`
 	Password string `json:"-"`
 	Contact  string `json:"contact"`
-	Tasks    Tasks  `gorm:"foreignKey:UserID"`
+	//@one-to-many
+	Tasks Tasks `gorm:"foreignKey:UserID"`
+	//@one-to-one
+	Role Role `json:"role"`
 }
 
 type Users []User
@@ -26,7 +29,7 @@ func (user *User) HashPassword(password string) error {
 	return nil
 }
 
-func (user *User) checkPassword(password string) error {
+func (user *User) CheckPassword(password string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		return err

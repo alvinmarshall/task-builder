@@ -1,22 +1,24 @@
-package auth
+package service
 
 import (
 	"fmt"
+	"taskbuilder/internal/types"
 	"testing"
 )
 
 func TestJwtWrapper_GenerateToken(t *testing.T) {
-	jwtWrapper := JwtWrapper{
+	jwtWrapper := &types.JwtWrapper{
 		Secret:    "secret",
 		ExpiresAt: 2,
 		Issuer:    "task-builder",
 	}
-	payload := JwtPayload{
+	newAuthService := NewAuthService(jwtWrapper)
+	payload := types.JwtPayload{
 		Id:    "1",
 		Email: "email@me.com",
 		Role:  "user",
 	}
-	token, err := jwtWrapper.GenerateToken(payload)
+	token, err := newAuthService.GenerateToken(payload)
 	if err != nil {
 		println(err.Error())
 	}
@@ -26,10 +28,11 @@ func TestJwtWrapper_GenerateToken(t *testing.T) {
 
 func TestJwtWrapper_ValidateToken(t *testing.T) {
 	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjEiLCJFbWFpbCI6ImVtYWlsQG1lLmNvbSIsIlJvbGUiOiJ1c2VyIiwiZXhwIjoxNjE1MTU1Mzg1LCJqdGkiOiIxIiwiaWF0IjoxNjE1MTU1MjY1LCJpc3MiOiJ0YXNrLWJ1aWxkZXIiLCJzdWIiOiJlbWFpbEBtZS5jb20ifQ.ncBFNcPtL5tf2Zwrty_nnyzYa1ypwOjF-jkkGvlYZEs"
-	jwtWrapper := JwtWrapper{
+	jwtWrapper := &types.JwtWrapper{
 		Secret: "secret",
 	}
-	jwtClaim, err := jwtWrapper.ValidateToken(token)
+	newAuthService := NewAuthService(jwtWrapper)
+	jwtClaim, err := newAuthService.ValidateToken(token)
 	if err != nil {
 		println(err.Error())
 	}

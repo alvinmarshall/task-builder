@@ -12,7 +12,8 @@ type userRepo struct {
 }
 
 func (u userRepo) Save(user domain.User) (*domain.User, error) {
-	err := u.db.Save(&user).Error
+	create := u.db.Create(&user)
+	err := create.Save(&user).Error
 	if err != nil {
 		return nil, err
 	}
