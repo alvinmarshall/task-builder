@@ -1,8 +1,12 @@
+build:
+	docker build -t taskbuilder:v1.0 .
 start:
 	docker-compose up -d
 
 stop:
 	docker-compose down
+
+run: build start
 
 mock-port:
 	mockgen -package mock_port -destination internal/mock/user_repository.go  --source= taskbuilder/internal/core/port UserRepository
