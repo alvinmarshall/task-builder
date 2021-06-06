@@ -1,23 +1,25 @@
 package config
 
-import "github.com/jinzhu/configor"
+import (
+	"github.com/jinzhu/configor"
+)
 
 type Config struct {
 	Application struct {
 		Name string `default:"my-application"`
 	}
 	Server struct {
-		Port string `default:"8080"`
+		Port string `env:"PORT"`
 	}
 	DataSource struct {
 		Use      string `default:"postgres"`
 		Postgres struct {
 			Enabled  bool   `default:"true"`
-			Username string `default:"postgres"`
-			Password string `default:"postgres"`
-			Database string
-			Port     string `default:"5432"`
-			Host     string `default:"localhost"`
+			Username string `env:"DB_USER"`
+			Password string `env:"DB_PASSWORD"`
+			Database string `env:"DB_NAME"`
+			Port     string `env:"DB_PORT"`
+			Host     string `env:"DB_HOST"`
 			Dialect  string `default:"postgres"`
 		}
 	}
@@ -28,9 +30,9 @@ type Config struct {
 		FileName    string `default:"app.log"`
 	}
 	Jwt struct {
-		Secret  string `default:"secrete"`
-		Expires int64
-		Issuer  string `default:"my-application"`
+		Secret  string `default:"secrete" env:"JWT_SECRET"`
+		Expires int64  `env:"JWT_EXPIRES"`
+		Issuer  string `default:"my-application" env:"APPLICATION_NAME"`
 	}
 }
 
