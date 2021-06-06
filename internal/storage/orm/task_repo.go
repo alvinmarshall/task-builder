@@ -1,7 +1,7 @@
 package orm
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"taskbuilder/internal/core/domain"
 	"taskbuilder/internal/core/port"
 )
@@ -20,7 +20,7 @@ func (t *taskRepo) Find(user domain.User) (*domain.Tasks, error) {
 }
 
 func (t *taskRepo) Save(task domain.Task) (*domain.Task, error) {
-	create := t.db.Create(&task)
+	create := t.db.Model(&task).Create(&task)
 	err := create.Save(&task).Error
 	if err != nil {
 		return nil, err
@@ -29,16 +29,16 @@ func (t *taskRepo) Save(task domain.Task) (*domain.Task, error) {
 }
 
 func (t *taskRepo) Delete(task *domain.Task) error {
-	return t.db.Delete(task).Error
+	return t.db.Model(&task).Delete(&task).Error
 }
 
 func (t *taskRepo) Update(data domain.Task) error {
-	return t.db.Update(data).Error
+	return t.db.Model(&data).Save(&data).Error
 }
 
 func (t *taskRepo) FindOne(id string) (*domain.Task, error) {
 	data := &domain.Task{}
-	err := t.db.Where("id = ?", id).Find(data).Error
+	err := t.db.Model(data).Where("id = ?", id).First(data).Error
 	if err != nil {
 		return nil, err
 	}

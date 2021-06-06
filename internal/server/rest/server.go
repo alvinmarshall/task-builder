@@ -2,11 +2,11 @@ package rest
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
 	"go.uber.org/dig"
+	"gorm.io/gorm"
 	"taskbuilder/internal/config"
-	"taskbuilder/internal/core/domain"
+	"taskbuilder/internal/storage/migration"
 )
 
 type server struct {
@@ -27,14 +27,12 @@ func (s *server) InitializeDB() error {
 	if err != nil {
 		return err
 	}
-	if err := db.AutoMigrate(
-		&domain.Task{},
-		&domain.User{},
-		&domain.Role{},
-	).Error; err != nil {
-		println(err.Error())
+	err = migration.Migrate(db)
+	if err != nil {
+		return err
 	}
 	return nil
+
 }
 
 func (s *server) Start() error {

@@ -1,19 +1,20 @@
 package domain
 
 import (
-	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 	"time"
 )
 
 type BaseEntity struct {
-	ID        string `gorm:"type:uuid;primary_key;"`
+	ID        string `json:"id" gorm:"type:uuid;primary_key;unique"`
 	CreatedAt time.Time
 	UpdatedAt time.Time  `json:"-"`
 	DeletedAt *time.Time `sql:"index" json:"-"`
 }
 
-func (base *BaseEntity) BeforeCreate(scope *gorm.Scope) error {
+func (base *BaseEntity) BeforeCreate(tx *gorm.DB) error {
 	uid := uuid.NewV4()
-	return scope.SetColumn("ID", uid.String())
+	tx.Statement.SetColumn("ID", uid.String())
+	return nil
 }
