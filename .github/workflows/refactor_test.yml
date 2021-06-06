@@ -1,0 +1,28 @@
+name: Go
+on:
+  pull_request:
+    branches: [ refactor/** ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.13
+
+      - name: Install mockgen
+        run: go get github.com/golang/mock/mockgen
+
+      - name: Generate mocks
+        run: make mock-port
+
+      - name: Unit test
+        run: go test -cover ./...
+
+      - name: Build
+        run: go build -v ./...
