@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -14,7 +13,7 @@ func NewDataSource(c *config.Config) (*gorm.DB, error) {
 			return newPostgres(c)
 		}
 	}
-	return nil, errors.New(fmt.Sprintf("DataSource Not Implemented %s", c.DataSource.Use))
+	return nil, fmt.Errorf("DataSource Not Implemented %s", c.DataSource.Use)
 }
 
 func newPostgres(c *config.Config) (*gorm.DB, error) {

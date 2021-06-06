@@ -7,6 +7,7 @@ import (
 	"taskbuilder/internal/logger"
 	"taskbuilder/internal/storage"
 	"taskbuilder/internal/storage/orm"
+	"taskbuilder/internal/types"
 )
 
 var container = dig.New()
@@ -28,6 +29,11 @@ func BuildContainer() *dig.Container {
 	// user
 	container.Provide(orm.NewUserRepo)
 	container.Provide(service.NewUserService)
+
+	// JwtWrapper
+	container.Provide(types.NewJwtWrapper)
+	// jwt
+	container.Provide(service.NewAuthService)
 
 	return container
 }

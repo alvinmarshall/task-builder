@@ -29,7 +29,7 @@ type Config struct {
 	}
 	Jwt struct {
 		Secret  string `default:"secrete"`
-		Expires int
+		Expires int64
 		Issuer  string `default:"my-application"`
 	}
 }

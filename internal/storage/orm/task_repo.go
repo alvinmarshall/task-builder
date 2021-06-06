@@ -20,7 +20,8 @@ func (t *taskRepo) Find(user domain.User) (*domain.Tasks, error) {
 }
 
 func (t *taskRepo) Save(task domain.Task) (*domain.Task, error) {
-	err := t.db.Create(&task).Error
+	create := t.db.Create(&task)
+	err := create.Save(&task).Error
 	if err != nil {
 		return nil, err
 	}
