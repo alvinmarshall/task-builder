@@ -12,13 +12,13 @@ func TestJwtWrapper_GenerateToken(t *testing.T) {
 		ExpiresAt: 2,
 		Issuer:    "task-builder",
 	}
-	newAuthService := NewAuthService(jwtWrapper)
+	newJwtService := NewJwtService(jwtWrapper)
 	payload := types.JwtPayload{
 		Id:    "1",
 		Email: "email@me.com",
 		Role:  "user",
 	}
-	token, err := newAuthService.GenerateToken(payload)
+	token, err := newJwtService.GenerateToken(payload)
 	if err != nil {
 		println(err.Error())
 	}
@@ -31,8 +31,8 @@ func TestJwtWrapper_ValidateToken(t *testing.T) {
 	jwtWrapper := &types.JwtWrapper{
 		Secret: "secret",
 	}
-	newAuthService := NewAuthService(jwtWrapper)
-	jwtClaim, err := newAuthService.ValidateToken(token)
+	newJwtService := NewJwtService(jwtWrapper)
+	jwtClaim, err := newJwtService.ValidateToken(token)
 	if err != nil {
 		println(err.Error())
 	}

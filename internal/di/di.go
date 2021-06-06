@@ -15,25 +15,24 @@ var container = dig.New()
 func BuildContainer() *dig.Container {
 	// config
 	container.Provide(config.NewConfig)
-
 	// data source
 	container.Provide(storage.NewDataSource)
-
 	// logger
 	container.Provide(logger.NewLogger)
-
 	// task
 	container.Provide(orm.NewTaskRepo)
 	container.Provide(service.NewTaskService)
-
 	// user
 	container.Provide(orm.NewUserRepo)
 	container.Provide(service.NewUserService)
-
+	// encryption
+	container.Provide(service.NewEncryptionService)
+	// auth
+	container.Provide(service.NewAuthService)
 	// JwtWrapper
 	container.Provide(types.NewJwtWrapper)
 	// jwt
-	container.Provide(service.NewAuthService)
+	container.Provide(service.NewJwtService)
 
 	return container
 }

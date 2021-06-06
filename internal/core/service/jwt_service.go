@@ -67,6 +67,6 @@ func (j jwtService) ValidateToken(token string) (claim *types.JwtClaim, err erro
 	return claims, nil
 }
 
-func NewAuthService(wrapper *types.JwtWrapper) JwtService {
+func NewJwtService(wrapper *types.JwtWrapper) JwtService {
 	return &jwtService{wrapper}
 }
