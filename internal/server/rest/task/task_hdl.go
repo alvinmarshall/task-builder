@@ -6,7 +6,7 @@ import (
 	"os"
 	"taskbuilder/internal/core/domain"
 	"taskbuilder/internal/core/port"
-	"taskbuilder/internal/handler/dto"
+	dto2 "taskbuilder/internal/server/rest/dto"
 )
 
 type taskHandler struct {
@@ -24,7 +24,7 @@ func (hdl *taskHandler) Get(c echo.Context) error {
 		return c.JSONPretty(http.StatusInternalServerError, map[string]string{"error": err.Error()}, " ")
 
 	}
-	response := dto.TaskResponse{
+	response := dto2.TaskResponse{
 		Id:          result.ID,
 		Title:       result.Title,
 		IsCompleted: result.IsCompleted,
@@ -47,7 +47,7 @@ func (hdl *taskHandler) GetAll(c echo.Context) error {
 }
 
 func (hdl *taskHandler) Create(c echo.Context) error {
-	taskRequest := dto.TaskRequest{}
+	taskRequest := dto2.TaskRequest{}
 	err := c.Bind(&taskRequest)
 	if err != nil {
 		return c.JSONPretty(http.StatusBadRequest, map[string]string{"error": err.Error()}, " ")
@@ -63,7 +63,7 @@ func (hdl *taskHandler) Create(c echo.Context) error {
 	if err != nil {
 		return c.JSONPretty(http.StatusInternalServerError, map[string]string{"error": err.Error()}, " ")
 	}
-	response := dto.TaskResponse{
+	response := dto2.TaskResponse{
 		Id:          result.ID,
 		Title:       result.Title,
 		IsCompleted: result.IsCompleted,

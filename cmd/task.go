@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"os"
 	"taskbuilder/internal/di"
-	"taskbuilder/internal/server"
+	"taskbuilder/internal/server/rest"
 )
 
 func main() {
@@ -24,7 +24,7 @@ func run() error {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	s := server.NewServer(e, buildContainer)
+	s := rest.NewServer(e, buildContainer)
 	s.MapRoutes()
 
 	err := s.InitializeDB()
