@@ -21,7 +21,7 @@ type jwtService struct {
 func (j jwtService) GetJWTConfig() middleware.JWTConfig {
 	return middleware.JWTConfig{
 		Claims:     &types.JwtClaim{},
-		SigningKey: j.jwtWrapper.Secret,
+		SigningKey: []byte(j.jwtWrapper.Secret),
 	}
 }
 
