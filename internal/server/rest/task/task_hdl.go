@@ -1,12 +1,13 @@
 package task
 
 import (
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"os"
 	"taskbuilder/internal/core/domain"
 	"taskbuilder/internal/core/port"
 	dto2 "taskbuilder/internal/server/rest/dto"
+	"taskbuilder/internal/types"
 )
 
 type taskHandler struct {
@@ -33,16 +34,14 @@ func (hdl *taskHandler) Get(c echo.Context) error {
 }
 
 func (hdl *taskHandler) GetAll(c echo.Context) error {
+	token := c.Get("user").(*jwt.Token)
+	claims := token.Claims.(*types.JwtClaim)
 	user := domain.User{}
-	// TODO Replace after authentication
-	user.ID = os.Getenv("USER_ID")
-	println("uuuusr", user.ID)
+	user.ID = claims.Id
 	tasks, err := hdl.service.GetAll(user)
 	if err != nil {
 		return c.JSONPretty(http.StatusInternalServerError, map[string]string{"error": err.Error()}, " ")
-
 	}
-
 	return c.JSONPretty(http.StatusOK, tasks, " ")
 }
 
@@ -57,8 +56,9 @@ func (hdl *taskHandler) Create(c echo.Context) error {
 		IsCompleted: taskRequest.IsCompleted,
 	}
 	user := domain.User{}
-	// TODO Replace after authentication
-	user.ID = os.Getenv("USER_ID")
+	token := c.Get("user").(*jwt.Token)
+	claim := token.Claims.(*types.JwtClaim)
+	user.ID = claim.Id
 	result, err := hdl.service.Create(req, user)
 	if err != nil {
 		return c.JSONPretty(http.StatusInternalServerError, map[string]string{"error": err.Error()}, " ")
