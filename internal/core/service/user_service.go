@@ -8,21 +8,28 @@ import (
 )
 
 type userService struct {
-	userRepository port.UserRepository
+	userRepository    port.UserRepository
+	encryptionService EncryptionService
+}
+
+func (u *userService) FindByEmail(email string) (*domain.User, error) {
+	return u.userRepository.FindByEmail(email)
 }
 
 func (u *userService) Create(user domain.User) (*domain.User, error) {
 	result, err := u.userRepository.FindByEmail(user.Email)
 	if err != nil {
-		return nil, err
+		fmt.Println(err)
 	}
 	if result != nil {
-		return nil, errors.New(fmt.Sprintf("email already in use: %s", user.Email))
+		return nil, fmt.Errorf("email already in use: %s", user.Email)
 	}
-	err = user.HashPassword(user.Password)
+	salt := 14
+	hashPassword, err := u.encryptionService.EncryptPassword(user.Password, salt)
 	if err != nil {
 		return nil, err
 	}
+	user.Password = hashPassword
 	return u.userRepository.Save(user)
 }
 
@@ -51,6 +58,6 @@ func (u *userService) Update(data domain.User) error {
 	return u.userRepository.Update(data)
 }
 
-func NewUserService(userRepository port.UserRepository) port.UserService {
-	return &userService{userRepository: userRepository}
+func NewUserService(userRepository port.UserRepository, encryptionService EncryptionService) port.UserService {
+	return &userService{userRepository: userRepository, encryptionService: encryptionService}
 }

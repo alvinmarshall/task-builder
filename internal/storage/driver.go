@@ -2,8 +2,8 @@ package storage
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"taskbuilder/internal/config"
 )
 
@@ -17,13 +17,13 @@ func NewDataSource(c *config.Config) (*gorm.DB, error) {
 }
 
 func newPostgres(c *config.Config) (*gorm.DB, error) {
-	connStr := fmt.Sprintf("host=%s port=%s dbname=%s user=%s sslmode=disable password=%s",
+	dsn := fmt.Sprintf("host=%s port=%s dbname=%s user=%s sslmode=disable password=%s",
 		c.DataSource.Postgres.Host,
 		c.DataSource.Postgres.Port,
 		c.DataSource.Postgres.Database,
 		c.DataSource.Postgres.Username,
 		c.DataSource.Postgres.Password)
-	db, err := gorm.Open(c.DataSource.Postgres.Dialect, connStr)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}

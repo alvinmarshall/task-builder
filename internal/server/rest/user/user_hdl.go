@@ -7,21 +7,21 @@ import (
 	"taskbuilder/internal/core/domain"
 	"taskbuilder/internal/core/port"
 	"taskbuilder/internal/core/service"
-	dto2 "taskbuilder/internal/server/rest/dto"
+	"taskbuilder/internal/server/rest/dto"
 	"taskbuilder/internal/types"
 )
 
 type userHandler struct {
-	service     port.UserService
-	authService service.JwtService
+	service    port.UserService
+	jwtService service.JwtService
 }
 
-func NewUserHandler(service port.UserService, authService service.JwtService) *userHandler {
-	return &userHandler{service, authService}
+func NewUserHandler(service port.UserService, jwtService service.JwtService) *userHandler {
+	return &userHandler{service, jwtService}
 }
 
 func (hdl *userHandler) Register(context echo.Context) error {
-	req := &dto2.UserRequest{}
+	req := &dto.UserRequest{}
 	err := context.Bind(req)
 	if err != nil {
 		return err
@@ -44,11 +44,11 @@ func (hdl *userHandler) Register(context echo.Context) error {
 		Email: user.Email,
 		Role:  user.Role.Name,
 	}
-	token, err := hdl.authService.GenerateToken(payload)
+	token, err := hdl.jwtService.GenerateToken(payload)
 	if err != nil {
 		return context.JSONPretty(http.StatusInternalServerError, map[string]interface{}{"message": err.Error()}, "")
 	}
-	response := dto2.UserCreationResponse{
+	response := dto.UserCreationResponse{
 		User:  user,
 		Token: token,
 	}

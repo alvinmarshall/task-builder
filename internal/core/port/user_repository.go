@@ -17,4 +17,5 @@ type UserService interface {
 	GetAll() (*domain.Users, error)
 	Delete(id string) error
 	Update(data domain.User) error
+	FindByEmail(email string) (*domain.User, error)
 }
